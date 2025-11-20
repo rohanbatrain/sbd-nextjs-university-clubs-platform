@@ -59,4 +59,19 @@ export const endpoints = {
         // Fixed: verticals detail uses global path, not club-scoped
         detail: (verticalId: string) => `/clubs/verticals/${verticalId}`,
     },
+    analytics: {
+        dashboard: (clubId: string) => `/clubs/${clubId}/analytics`,
+        memberGrowth: (clubId: string) => `/clubs/${clubId}/analytics/growth`,
+        eventAttendance: (clubId: string) => `/clubs/${clubId}/analytics/events`,
+        engagement: (clubId: string) => `/clubs/${clubId}/analytics/engagement`,
+        reports: (clubId: string, type: string) => `/clubs/${clubId}/reports/${type}`,
+    },
+    messaging: {
+        list: (clubId: string) => `/clubs/${clubId}/messages`,
+        send: (clubId: string) => `/clubs/${clubId}/messages`,
+    },
+    announcements: {
+        list: (clubId: string) => `/clubs/${clubId}/announcements`,
+        create: (clubId: string) => `/clubs/${clubId}/announcements`,
+    },
 };

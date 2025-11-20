@@ -45,6 +45,10 @@ const eventSchema = z.object({
     is_virtual: z.boolean(),
     event_type: z.enum(['meeting', 'workshop', 'social', 'competition', 'other']),
     visibility: z.enum(['public', 'members_only', 'private']),
+    is_recurring: z.boolean().default(false),
+    recurrence_rule: z.string().optional(),
+    send_reminders: z.boolean().default(true),
+    template_name: z.string().optional(),
 });
 
 type EventFormData = z.infer<typeof eventSchema>;
@@ -70,6 +74,10 @@ export function CreateEventDialog({ clubId, onEventCreated }: CreateEventDialogP
             is_virtual: false,
             event_type: 'meeting',
             visibility: 'public',
+            is_recurring: false,
+            recurrence_rule: '',
+            send_reminders: true,
+            template_name: '',
         },
     });
 
@@ -255,6 +263,90 @@ export function CreateEventDialog({ clubId, onEventCreated }: CreateEventDialogP
                                         />
                                     </FormControl>
                                     <FormLabel className="!mt-0">Virtual Event</FormLabel>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="is_recurring"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-2">
+                                    <FormControl>
+                                        <input
+                                            type="checkbox"
+                                            checked={field.value}
+                                            onChange={field.onChange}
+                                            className="h-4 w-4"
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0">Recurring Event</FormLabel>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        {form.watch('is_recurring') && (
+                            <FormField
+                                control={form.control}
+                                name="recurrence_rule"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Recurrence Pattern</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select pattern" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="daily">Daily</SelectItem>
+                                                <SelectItem value="weekly">Weekly</SelectItem>
+                                                <SelectItem value="biweekly">Bi-weekly</SelectItem>
+                                                <SelectItem value="monthly">Monthly</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
+
+                        <FormField
+                            control={form.control}
+                            name="send_reminders"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-2">
+                                    <FormControl>
+                                        <input
+                                            type="checkbox"
+                                            checked={field.value}
+                                            onChange={field.onChange}
+                                            className="h-4 w-4"
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0">Send Reminders</FormLabel>
+                                    <FormDescription className="!mt-0 ml-auto text-xs">
+                                        Members will receive notifications before the event
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="template_name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Save as Template (Optional)</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g. Weekly Team Meeting" {...field} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Save this event as a template for future use
+                                    </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}

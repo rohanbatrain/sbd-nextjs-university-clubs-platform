@@ -64,7 +64,7 @@ export function CreateEventDialog({ clubId, onEventCreated }: CreateEventDialogP
     const router = useRouter();
 
     const form = useForm<EventFormData>({
-        resolver: zodResolver(eventSchema),
+        resolver: zodResolver(eventSchema) as any,
         defaultValues: {
             title: '',
             description: '',
